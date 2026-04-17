@@ -1,4 +1,4 @@
-import { TrendingUp, Users, Clock, Bell, ArrowUpRight } from "lucide-react";
+import { TrendingUp, Clock, Bell, ArrowUpRight, Plus, Calendar, Scissors, Coffee } from "lucide-react";
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { barbers } from "@/lib/data";
 
@@ -13,12 +13,71 @@ const queue = [
   { name: "Hugo Reed", service: "Signature Cut", wait: "35 min", barber: barbers[2] },
 ];
 
+type TimelineItem = {
+  time: string;
+  client: string;
+  service: string;
+  barber: typeof barbers[number];
+  status: "done" | "now" | "next" | "upcoming";
+  duration: string;
+};
+
+const timeline: TimelineItem[] = [
+  { time: "09:00", client: "James Whitmore", service: "Signature Cut", barber: barbers[0], status: "done", duration: "45m" },
+  { time: "10:00", client: "Felix Dupont", service: "Beard Sculpt", barber: barbers[1], status: "done", duration: "30m" },
+  { time: "10:45", client: "Arthur Quinn", service: "The Royale", barber: barbers[2], status: "now", duration: "90m" },
+  { time: "12:30", client: "Oliver Bennett", service: "Skin Fade", barber: barbers[0], status: "next", duration: "60m" },
+  { time: "13:45", client: "Theo Marsh", service: "Beard Sculpt", barber: barbers[1], status: "upcoming", duration: "30m" },
+  { time: "14:30", client: "Hugo Reed", service: "Signature Cut", barber: barbers[2], status: "upcoming", duration: "45m" },
+  { time: "15:30", client: "Lucas Ferrer", service: "Skin Fade", barber: barbers[0], status: "upcoming", duration: "60m" },
+  { time: "17:00", client: "Sebastian Cole", service: "The Royale", barber: barbers[1], status: "upcoming", duration: "90m" },
+];
+
+const statusDot = (s: TimelineItem["status"]) => {
+  if (s === "done") return "bg-muted";
+  if (s === "now") return "bg-[hsl(var(--success))] animate-pulse";
+  if (s === "next") return "bg-platinum-dim";
+  return "bg-secondary";
+};
+
+// Circular progress ring
+const Ring = ({ value }: { value: number }) => {
+  const r = 38;
+  const c = 2 * Math.PI * r;
+  const dash = (value / 100) * c;
+  return (
+    <div className="relative grid place-items-center">
+      <svg width="100" height="100" viewBox="0 0 100 100" className="-rotate-90">
+        <circle cx="50" cy="50" r={r} stroke="hsl(var(--secondary))" strokeWidth="6" fill="none" />
+        <circle
+          cx="50" cy="50" r={r}
+          stroke="url(#ringGrad)"
+          strokeWidth="6"
+          strokeLinecap="round"
+          fill="none"
+          strokeDasharray={`${dash} ${c}`}
+          style={{ transition: "stroke-dasharray 0.8s cubic-bezier(0.32, 0.72, 0, 1)" }}
+        />
+        <defs>
+          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="hsl(var(--platinum))" />
+            <stop offset="100%" stopColor="hsl(var(--platinum-dim))" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div className="absolute inset-0 grid place-items-center">
+        <div className="text-2xl font-semibold tracking-tight text-platinum">{value}%</div>
+      </div>
+    </div>
+  );
+};
+
 const Admin = () => {
   return (
     <div className="mx-auto max-w-2xl px-5 pb-32 pt-6 animate-float-up">
       <header className="mb-6 flex items-center justify-between">
         <div>
-          <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Studio Console</div>
+          <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Command Center</div>
           <h1 className="mt-1 text-[28px] font-semibold tracking-tight">Today, Tuesday</h1>
         </div>
         <button className="press glass relative grid h-10 w-10 place-items-center rounded-full">
@@ -29,7 +88,58 @@ const Admin = () => {
 
       {/* Bento */}
       <div className="grid grid-cols-6 gap-3">
-        {/* Revenue chart */}
+        {/* Card A — Today's Appointment Timeline (LARGE) */}
+        <div className="glass-strong col-span-6 rounded-[24px] p-5">
+          <div className="mb-4 flex items-end justify-between">
+            <div>
+              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Today's flow</div>
+              <h2 className="mt-1 text-xl font-semibold tracking-tight">Appointment Timeline</h2>
+            </div>
+            <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Calendar className="h-3 w-3" strokeWidth={1.5} /> 8 booked · 2 open
+            </div>
+          </div>
+
+          <div className="no-scrollbar relative max-h-[360px] overflow-y-auto pr-1">
+            {/* vertical rail */}
+            <div className="absolute left-[58px] top-2 bottom-2 w-px bg-border/60" />
+            <ul className="space-y-4">
+              {timeline.map((t) => (
+                <li key={t.time} className="relative flex items-start gap-3">
+                  <div className="w-12 pt-1 text-right text-[11px] font-medium tabular-nums tracking-tight text-muted-foreground">
+                    {t.time}
+                  </div>
+                  <div className={`mt-2 h-2 w-2 shrink-0 rounded-full ${statusDot(t.status)}`} />
+                  <div
+                    className={`flex-1 rounded-2xl border border-border/50 p-3 transition-colors ${
+                      t.status === "now" ? "bg-secondary/60 ring-1 ring-platinum-dim/30" : "bg-secondary/20"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="truncate text-sm font-medium tracking-tight">{t.client}</div>
+                        <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                          <Scissors className="h-3 w-3" strokeWidth={1.5} />
+                          <span className="truncate">{t.service} · {t.duration}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {t.status === "now" && (
+                          <span className="rounded-full bg-[hsl(var(--success))]/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-[hsl(var(--success))]">
+                            Live
+                          </span>
+                        )}
+                        <img src={t.barber.image} alt="" className="h-7 w-7 rounded-lg object-cover" loading="lazy" />
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Card B — Revenue Analytics (MEDIUM) */}
         <div className="glass-strong col-span-6 rounded-[24px] p-5 sm:col-span-4">
           <div className="flex items-start justify-between">
             <div>
@@ -67,27 +177,26 @@ const Admin = () => {
           </div>
         </div>
 
-        {/* Occupancy */}
-        <div className="glass col-span-3 rounded-[24px] p-5 sm:col-span-2">
+        {/* Card C — Seat Occupancy ring (SMALL) */}
+        <div className="glass col-span-6 rounded-[24px] p-5 sm:col-span-2">
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Seat occupancy</div>
-          <div className="mt-3 flex items-end gap-2">
-            <div className="text-3xl font-semibold tracking-tight text-platinum">86%</div>
-            <Users className="mb-1 h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
-          </div>
-          <div className="mt-4 space-y-2">
-            {[88, 92, 78].map((p, i) => (
-              <div key={i}>
-                <div className="mb-1 flex justify-between text-[10px] text-muted-foreground">
-                  <span>Chair {i + 1}</span><span>{p}%</span>
+          <div className="mt-3 flex items-center justify-between">
+            <Ring value={86} />
+            <div className="space-y-1.5 text-right">
+              {[
+                { label: "Chair 1", v: 88 },
+                { label: "Chair 2", v: 92 },
+                { label: "Chair 3", v: 78 },
+              ].map((c) => (
+                <div key={c.label} className="text-[10px] text-muted-foreground">
+                  <span className="tabular-nums text-platinum-dim">{c.v}%</span> · {c.label}
                 </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
-                  <div className="h-full rounded-full bg-gradient-platinum" style={{ width: `${p}%` }} />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
+        {/* Mini stats */}
         <div className="glass col-span-3 rounded-[24px] p-5">
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Bookings today</div>
           <div className="mt-3 text-3xl font-semibold tracking-tight text-platinum">28</div>
@@ -96,7 +205,9 @@ const Admin = () => {
         <div className="glass col-span-3 rounded-[24px] p-5">
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Avg ticket</div>
           <div className="mt-3 text-3xl font-semibold tracking-tight text-platinum">£64</div>
-          <div className="mt-1 text-[11px] text-[hsl(var(--success))]">+£6 vs avg</div>
+          <div className="mt-1 flex items-center gap-1 text-[11px] text-[hsl(var(--success))]">
+            <Coffee className="h-3 w-3" strokeWidth={1.5} /> +£6 vs avg
+          </div>
         </div>
       </div>
 
@@ -133,6 +244,16 @@ const Admin = () => {
           ))}
         </div>
       </section>
+
+      {/* Floating Manual Entry FAB */}
+      <button
+        aria-label="Manual entry"
+        className="press glass-strong fixed bottom-24 right-5 z-40 flex items-center gap-2 rounded-[24px] px-5 py-4 text-sm font-medium tracking-tight text-platinum shadow-elev ring-1 ring-platinum-dim/20 hover:ring-platinum-dim/40"
+        style={{ animation: "pulse-glow 3.5s ease-in-out infinite" }}
+      >
+        <Plus className="h-4 w-4" strokeWidth={1.75} />
+        Manual entry
+      </button>
     </div>
   );
 };

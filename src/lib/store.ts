@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { barbers, services, timeSlots, type Barber, type Service } from "./data";
 
 export type AppointmentStatus = "upcoming" | "now" | "done" | "cancelled";
@@ -38,35 +39,44 @@ type State = {
   openSlotsCount: () => number;
 };
 
-export const useAppointments = create<State>((set, get) => ({
-  appointments: seed,
-  history: [],
-  add: (a) => {
-    const appt: Appointment = { ...a, id: `a${Date.now()}`, createdAt: Date.now() };
-    set((s) => ({ appointments: [...s.appointments, appt] }));
-    return appt;
-  },
-  confirm: (id) =>
-    set((s) => ({
-      appointments: s.appointments.map((a) => (a.id === id ? { ...a, status: "now" } : a)),
-    })),
-  complete: (id) =>
-    set((s) => {
-      const appt = s.appointments.find((a) => a.id === id);
-      if (!appt) return s;
-      const finished = { ...appt, status: "done" as AppointmentStatus };
-      return {
-        appointments: s.appointments.filter((a) => a.id !== id),
-        history: [finished, ...s.history],
-      };
+export const useAppointments = create<State>()(
+  persist(
+    (set, get) => ({
+      appointments: seed,
+      history: [],
+      add: (a) => {
+        const appt: Appointment = { ...a, id: `a${Date.now()}`, createdAt: Date.now() };
+        set((s) => ({ appointments: [...s.appointments, appt] }));
+        return appt;
+      },
+      confirm: (id) =>
+        set((s) => ({
+          appointments: s.appointments.map((a) => (a.id === id ? { ...a, status: "now" } : a)),
+        })),
+      complete: (id) =>
+        set((s) => {
+          const appt = s.appointments.find((a) => a.id === id);
+          if (!appt) return s;
+          const finished = { ...appt, status: "done" as AppointmentStatus };
+          return {
+            appointments: s.appointments.filter((a) => a.id !== id),
+            history: [finished, ...s.history],
+          };
+        }),
+      cancel: (id) =>
+        set((s) => ({
+          appointments: s.appointments.filter((a) => a.id !== id),
+        })),
+      occupiedSlots: () => get().appointments.map((a) => a.time),
+      openSlotsCount: () => {
+        const occupied = new Set(get().appointments.map((a) => a.time));
+        return timeSlots.filter((t) => !occupied.has(t)).length;
+      },
     }),
-  cancel: (id) =>
-    set((s) => ({
-      appointments: s.appointments.filter((a) => a.id !== id),
-    })),
-  occupiedSlots: () => get().appointments.map((a) => a.time),
-  openSlotsCount: () => {
-    const occupied = new Set(get().appointments.map((a) => a.time));
-    return timeSlots.filter((t) => !occupied.has(t)).length;
-  },
-}));
+    {
+      name: "crown-appointments",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (s) => ({ appointments: s.appointments, history: s.history }),
+    }
+  )
+);

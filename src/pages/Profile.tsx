@@ -51,21 +51,52 @@ const Profile = () => {
       {/* Stats bento */}
       <section className="mt-5 grid grid-cols-3 gap-3">
         {[
-          { v: "24", l: "Visits" },
-          { v: "£1.6k", l: "Spent" },
+          { v: String(history.length + 24), l: "Visits" },
+          { v: `£${(totalSpent / 1000).toFixed(1)}k`, l: "Spent" },
           { v: "4.9", l: "Rating" },
         ].map((s) => (
-          <div key={s.l} className="glass rounded-[20px] p-4 text-center">
+          <div key={s.l} className="glass-card rounded-[20px] p-4 text-center">
             <div className="text-xl font-semibold tracking-tight text-platinum">{s.v}</div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{s.l}</div>
           </div>
         ))}
       </section>
 
+      {/* Booking history */}
+      <section className="mt-5">
+        <div className="mb-3 flex items-end justify-between">
+          <h2 className="text-base font-semibold tracking-tight">Booking history</h2>
+          <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{history.length} recent</span>
+        </div>
+        <div className="glass-card overflow-hidden rounded-[24px]">
+          {history.length === 0 ? (
+            <div className="p-6 text-center text-xs text-muted-foreground">
+              No completed visits yet. Your finished cuts will appear here.
+            </div>
+          ) : (
+            history.map((h, idx) => (
+              <div
+                key={h.id}
+                className={`flex items-center gap-4 p-4 ${idx < history.length - 1 ? "border-b border-border/60" : ""}`}
+              >
+                <div className="grid h-9 w-9 place-items-center rounded-full bg-[hsl(var(--success))]/15 text-[hsl(var(--success))]">
+                  <Check className="h-4 w-4" strokeWidth={2} />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-medium tracking-tight">{h.service.name}</div>
+                  <div className="text-[11px] text-muted-foreground">{h.barber.name} · {h.time}</div>
+                </div>
+                <div className="text-sm font-semibold text-platinum">£{h.price + (h.tip ?? 0)}</div>
+              </div>
+            ))
+          )}
+        </div>
+      </section>
+
       {/* Menu */}
-      <section className="mt-5 glass overflow-hidden rounded-[24px]">
+      <section className="mt-5 glass-card overflow-hidden rounded-[24px]">
         {[
-          { i: Calendar, l: "Booking history" },
+          { i: Calendar, l: `Upcoming (${upcoming.length})` },
           { i: CreditCard, l: "Payment methods" },
           { i: Bell, l: "Notifications" },
         ].map(({ i: Icon, l }, idx, arr) => (

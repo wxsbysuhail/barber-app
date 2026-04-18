@@ -4,6 +4,7 @@ import { TrendingUp, Clock, Bell, ArrowUpRight, Plus, Calendar, Scissors, Coffee
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { useAppointments, type Appointment } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const revenueData = [
   { d: "Mon", v: 820 }, { d: "Tue", v: 940 }, { d: "Wed", v: 1120 },
@@ -116,8 +117,10 @@ const Admin = () => {
                     <div className={`mt-2 h-2 w-2 shrink-0 rounded-full ${statusDot(t.status)}`} />
                     <div
                       className={cn(
-                        "flex-1 rounded-2xl border-[0.5px] border-white/10 p-3 transition-colors",
-                        t.status === "now" ? "bg-secondary/60 ring-1 ring-platinum-dim/30" : "bg-secondary/20"
+                        "flex-1 rounded-2xl border-[0.5px] border-white/10 p-3 transition-all duration-300",
+                        t.status === "now"
+                          ? "bg-secondary/60 border-platinum/40 shadow-[0_0_24px_-6px_hsl(var(--platinum)/0.45)]"
+                          : "bg-secondary/20"
                       )}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -156,7 +159,13 @@ const Admin = () => {
                           </span>
                         )}
                         <button
-                          onClick={() => complete(t.id)}
+                          onClick={() => {
+                            const amount = t.price + (t.tip ?? 0);
+                            complete(t.id);
+                            toast.success(`+£${amount} · ${t.client}`, {
+                              description: `${t.service.name} completed · revenue updated`,
+                            });
+                          }}
                           className="press flex items-center gap-1.5 rounded-full border-[0.5px] border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-platinum hover:bg-white/10"
                         >
                           Finish

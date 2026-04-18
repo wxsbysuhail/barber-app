@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Sparkles, Scissors, Clock, MapPin } from "lucide-react";
 import heroShop from "@/assets/hero-shop.jpg";
-import { services, barbers } from "@/lib/data";
+import { services, barbers, timeSlots } from "@/lib/data";
 import { useAppointments } from "@/lib/store";
 
 const Index = () => {
   const next = barbers[0];
   const appointments = useAppointments((s) => s.appointments);
   const occupied = new Set(appointments.map((a) => a.time));
-  const openSlots = require ? 0 : 0;
+  const openSlots = timeSlots.filter((t) => !occupied.has(t)).length;
 
   return (
     <div className="mx-auto max-w-md px-5 pb-32 pt-6 animate-float-up">

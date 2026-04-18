@@ -1,11 +1,14 @@
 import { Logo } from "@/components/Logo";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ArrowUpRight, Sparkles, Scissors, Clock, MapPin } from "lucide-react";
 import heroShop from "@/assets/hero-shop.jpg";
 import { services, barbers } from "@/lib/data";
+import { useAppointments } from "@/lib/store";
 
 const Index = () => {
   const next = barbers[0];
+  const openSlots = useAppointments((s) => s.openSlotsCount());
 
   return (
     <div className="mx-auto max-w-md px-5 pb-32 pt-6 animate-float-up">

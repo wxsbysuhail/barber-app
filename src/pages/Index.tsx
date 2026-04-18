@@ -8,7 +8,9 @@ import { useAppointments } from "@/lib/store";
 
 const Index = () => {
   const next = barbers[0];
-  const openSlots = useAppointments((s) => s.openSlotsCount());
+  const appointments = useAppointments((s) => s.appointments);
+  const openSlots = useAppointments.getState().openSlotsCount();
+  void appointments; // re-subscribe trigger
 
   return (
     <div className="mx-auto max-w-md px-5 pb-32 pt-6 animate-float-up">

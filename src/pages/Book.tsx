@@ -15,7 +15,8 @@ const Book = () => {
   const [barber, setBarber] = useState<Barber | null>(null);
   const [slot, setSlot] = useState<string | null>(null);
 
-  const occupied = useAppointments((s) => s.appointments.map((a) => a.time));
+  const appointments = useAppointments((s) => s.appointments);
+  const occupied = appointments.map((a) => a.time);
 
   const next = () => {
     if (step === 3 && slot) {

@@ -5,7 +5,8 @@ import { useAppointments } from "@/lib/store";
 const Profile = () => {
   const next = barbers[0];
   const history = useAppointments((s) => s.history);
-  const upcoming = useAppointments((s) => s.appointments.filter((a) => a.status === "upcoming"));
+  const appointments = useAppointments((s) => s.appointments);
+  const upcoming = appointments.filter((a) => a.status === "upcoming");
   const totalSpent = history.reduce((sum, a) => sum + a.price + (a.tip ?? 0), 0) + 1620;
 
   return (

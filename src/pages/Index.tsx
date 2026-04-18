@@ -1,11 +1,14 @@
 import { Logo } from "@/components/Logo";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ArrowUpRight, Sparkles, Scissors, Clock, MapPin } from "lucide-react";
 import heroShop from "@/assets/hero-shop.jpg";
 import { services, barbers } from "@/lib/data";
+import { useAppointments } from "@/lib/store";
 
 const Index = () => {
   const next = barbers[0];
+  const openSlots = useAppointments((s) => s.openSlotsCount());
 
   return (
     <div className="mx-auto max-w-md px-5 pb-32 pt-6 animate-float-up">
@@ -47,17 +50,17 @@ const Index = () => {
 
       {/* Bento grid */}
       <section className="mt-5 grid grid-cols-2 gap-3">
-        <Link to="/book" className="press group glass col-span-2 rounded-[24px] p-5">
-          <div className="flex items-center justify-between">
+        <Link to="/book" className="press group glass-card col-span-2 rounded-[24px] p-5">
+          <motion.div layoutId="book-hero" className="flex items-center justify-between">
             <div>
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Quick action</div>
               <div className="mt-1 text-xl font-semibold tracking-tight">Book a chair</div>
-              <div className="mt-1 text-xs text-muted-foreground">3 slots open today</div>
+              <div className="mt-1 text-xs text-muted-foreground">{openSlots} slots open today</div>
             </div>
             <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground transition group-hover:rotate-6">
               <Scissors className="h-5 w-5" strokeWidth={1.5} />
             </div>
-          </div>
+          </motion.div>
         </Link>
 
         <Link to="/style" className="press glass rounded-[24px] p-4">

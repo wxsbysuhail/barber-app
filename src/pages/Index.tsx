@@ -9,8 +9,8 @@ import { useAppointments } from "@/lib/store";
 const Index = () => {
   const next = barbers[0];
   const appointments = useAppointments((s) => s.appointments);
-  const openSlots = useAppointments.getState().openSlotsCount();
-  void appointments; // re-subscribe trigger
+  const occupied = new Set(appointments.map((a) => a.time));
+  const openSlots = require ? 0 : 0;
 
   return (
     <div className="mx-auto max-w-md px-5 pb-32 pt-6 animate-float-up">

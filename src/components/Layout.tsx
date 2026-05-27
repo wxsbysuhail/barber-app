@@ -18,11 +18,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const isMobile = useIsMobile();
   const { isIntelligenceOpen, setIntelligenceOpen } = useUI();
   const { unreadCount } = useIntelligence();
-  const hideNav = pathname === "/checkout" || pathname === "/book" || pathname === "/style";
-
-  if (hideNav) {
-    return <main className="w-full min-h-screen relative">{children}</main>;
-  }
 
   return (
     <div className={cn(
@@ -56,18 +51,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       {!isMobile && <Sidebar />}
       
       <main className="flex-1 relative z-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={pathname}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.12, ease: "linear" }}
-            className={cn("w-full h-full min-h-screen", isMobile && "pb-48")}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
+        <div className={cn("w-full h-full min-h-screen", isMobile && "pb-48")}>
+          {children}
+        </div>
 
         <IntelligenceCenter 
           isOpen={isIntelligenceOpen} 

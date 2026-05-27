@@ -3,22 +3,20 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import Book from "./pages/Book.tsx";
-import Checkout from "./pages/Checkout.tsx";
-import AIStyle from "./pages/AIStyle.tsx";
-import Profile from "./pages/Profile.tsx";
-import Admin from "./pages/Admin.tsx";
-import { TabBar } from "./components/TabBar.tsx";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+import Book from "./pages/Book";
+import Checkout from "./pages/Checkout";
+import AIStyle from "./pages/AIStyle";
+import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
+import { Layout } from "./components/Layout";
 
 const queryClient = new QueryClient();
 
 const Shell = () => {
-  const { pathname } = useLocation();
-  const hideTabs = pathname === "/checkout";
   return (
-    <>
+    <Layout>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/book" element={<Book />} />
@@ -28,8 +26,7 @@ const Shell = () => {
         <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {!hideTabs && <TabBar />}
-    </>
+    </Layout>
   );
 };
 
@@ -38,7 +35,10 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter future={{ 
+        v7_startTransition: true, 
+        v7_relativeSplatPath: true 
+      }}>
         <Shell />
       </BrowserRouter>
     </TooltipProvider>

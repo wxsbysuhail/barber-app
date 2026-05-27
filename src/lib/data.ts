@@ -4,6 +4,7 @@ export type Service = {
   duration: number;
   price: number;
   description: string;
+  category: "The Essentials" | "Elite Care";
 };
 
 export type Barber = {
@@ -22,10 +23,10 @@ import b2 from "@/assets/barber-2.jpg";
 import b3 from "@/assets/barber-3.jpg";
 
 export const services: Service[] = [
-  { id: "signature", name: "Signature Cut", duration: 45, price: 65, description: "Precision tailored cut with hot towel finish." },
-  { id: "fade", name: "Skin Fade", duration: 60, price: 75, description: "Seamless taper with razor detailing." },
-  { id: "beard", name: "Beard Sculpt", duration: 30, price: 40, description: "Hot towel, oil massage, sharp lines." },
-  { id: "royale", name: "The Royale", duration: 90, price: 140, description: "Cut, shave, scalp treatment, espresso." },
+  { id: "signature", name: "Signature Cut", duration: 45, price: 1200, description: "Precision tailored cut with hot towel finish.", category: "The Essentials" },
+  { id: "fade", name: "Skin Fade", duration: 60, price: 1400, description: "Seamless taper with razor detailing.", category: "The Essentials" },
+  { id: "beard", name: "Beard Sculpt", duration: 30, price: 800, description: "Hot towel, oil massage, sharp lines.", category: "The Essentials" },
+  { id: "royale", name: "The Royale", duration: 90, price: 2500, description: "Cut, shave, scalp treatment, espresso.", category: "Elite Care" },
 ];
 
 export const barbers: Barber[] = [

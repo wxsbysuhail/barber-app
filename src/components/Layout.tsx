@@ -25,7 +25,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col lg:flex-row bg-obsidian overflow-hidden">
+    <div className={cn(
+      "flex min-h-screen w-full flex-col lg:flex-row bg-obsidian overflow-hidden",
+      isMobile && unreadCount > 0 && "has-live-briefings"
+    )}>
       
       {/* ── Dynamic Island Pill (Mobile-First Top Center) ── */}
       <AnimatePresence>

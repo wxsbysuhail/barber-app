@@ -9,6 +9,12 @@
     <meta name="description" content="CROWN is a premium barber appointment platform. Book master barbers, preview styles with AI, and pay seamlessly.">
     <link rel="canonical" href="/" />
     
+    <!-- PWA Settings & Apple Meta Tags -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Koupé" />
+    <link rel="apple-touch-icon" href="/placeholder.svg" />
     
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Barber.mu">
@@ -23,5 +29,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Service Worker registered successfully', reg.scope))
+            .catch(err => console.error('Service Worker registration failed', err));
+        });
+      }
+    </script>
   </body>
 </html>

@@ -93,7 +93,30 @@
     background-attachment: fixed;
     padding-bottom: env(safe-area-inset-bottom);
     padding-top: env(safe-area-inset-top);
+    overscroll-behavior-y: none;
   }
+  
+  /* GPU Hardware Acceleration Styles & Animation Performance optimization */
+  .gpu-accelerated,
+  header.sticky,
+  .fixed,
+  .absolute {
+    transform: translate3d(0, 0, 0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  /* Fix Live Briefing Pill Header Collision on Mobile */
+  @media (max-width: 1023px) {
+    .has-live-briefings header.sticky {
+      padding-top: calc(4.25rem + env(safe-area-inset-top)) !important;
+      transition: padding-top 0.3s cubic-bezier(0.32, 0.72, 0, 1) !important;
+    }
+    .has-live-briefings main.pb-48 {
+      padding-top: calc(1rem) !important;
+    }
+  }
+
   h1, h2, h3, h4 {
     letter-spacing: -0.03em;
   }

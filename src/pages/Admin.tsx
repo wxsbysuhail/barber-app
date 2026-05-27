@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  TrendingUp, Clock, Bell, ArrowUpRight, Plus, Calendar, Scissors, 
-  Check, Trash2, Play, X, Zap, Target, Users, Sparkles, Activity, Search, 
+  TrendingUp, Clock, ArrowUpRight, Plus, Calendar, Scissors, 
+  Check, Trash2, Play, X, Zap, Target, Users, Sparkles, Activity,
   Filter, Shield, Radio, ChevronRight, Star
 } from "lucide-react";
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
@@ -158,18 +158,6 @@ const Admin = () => {
         
         <div className="flex items-center gap-2">
            <button 
-             onClick={() => { haptics.light(); toast.info("Broadcasting status updates..."); }} 
-             className="press h-9 w-9 rounded-full border border-white/[0.08] bg-white/[0.03] flex items-center justify-center text-white/70 hover:bg-white/[0.07] transition-all"
-           >
-              <Radio className="h-4 w-4" />
-           </button>
-           <button 
-             onClick={() => { haptics.light(); toast.info("Search active."); }} 
-             className="press h-9 w-9 rounded-full border border-white/[0.08] bg-white/[0.03] flex items-center justify-center text-white/70 hover:bg-white/[0.07] transition-all"
-           >
-              <Search className="h-4 w-4" />
-           </button>
-           <button 
              onClick={() => {
                haptics.medium();
                setServiceForm({ name: "", duration: 45, price: 1200 });
@@ -179,33 +167,10 @@ const Admin = () => {
            >
               <Plus className="h-4 w-4" />
            </button>
-           
-           <button 
-             onClick={() => { haptics.medium(); setIntelligenceOpen(true); }}
-             className="press h-9 w-9 rounded-full border border-white/[0.08] bg-white/[0.03] flex items-center justify-center text-white/70 hover:bg-white/[0.07] transition-all relative"
-           >
-              <Bell className="h-4 w-4" />
-              {unreadCount > 0 && (
-                <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-amber-500 border border-obsidian z-20" />
-              )}
-           </button>
         </div>
       </header>
       
-      {/* Tactical Mobile Ticker */}
-      <div className="lg:hidden bg-amber-500/[0.04] border-b border-amber-500/10 py-1.5 overflow-hidden flex items-center">
-         <motion.div 
-           animate={{ x: ["100%", "-100%"] }}
-           transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
-           className="whitespace-nowrap flex items-center gap-8 text-[7px] font-black uppercase tracking-[0.25em] text-amber-500"
-         >
-            <span>All Stations Online</span>
-            <div className="h-1 w-1 rounded-full bg-amber-500/40" />
-            <span>Busy Rate: High</span>
-            <div className="h-1 w-1 rounded-full bg-amber-500/40" />
-            <span>Next session in 14m</span>
-         </motion.div>
-      </div>
+      {/* Tactical Mobile Ticker — archived */}
 
       <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
         

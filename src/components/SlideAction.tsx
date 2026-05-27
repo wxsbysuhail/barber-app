@@ -100,24 +100,24 @@ export const SlideAction = ({ onComplete, label = "Slide to confirm", price = "R
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/40 backdrop-blur-xl"
+            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-6 bg-black/60 backdrop-blur-2xl px-8"
           >
             {/* Centered Checkmark Circle */}
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", bounce: 0.4, duration: 0.8 }}
-              className="h-20 w-20 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.2)]"
+              className="h-24 w-24 rounded-full bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center shadow-[0_0_60px_rgba(16,185,129,0.25)]"
             >
-              <svg className="w-10 h-10 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-12 h-12 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                 <motion.path
                   d="M20 6L9 17L4 12"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.4, ease: "easeOut", delay: 0.2 }}
+                  transition={{ duration: 0.5, ease: "easeOut", delay: 0.15 }}
                   onAnimationComplete={() => {
                     if (navigator.vibrate) {
-                      navigator.vibrate(60);
+                      navigator.vibrate([40, 30, 80]);
                     }
                   }}
                 />
@@ -125,14 +125,15 @@ export const SlideAction = ({ onComplete, label = "Slide to confirm", price = "R
             </motion.div>
 
             {/* Success Text */}
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.4 }}
-              className="mt-6 text-sm font-black uppercase tracking-[0.3em] text-white"
+              transition={{ delay: 0.55, duration: 0.45 }}
+              className="text-center"
             >
-              Session Locked.
-            </motion.p>
+              <p className="text-xl font-bold tracking-tight text-white mb-2">Booking Confirmed</p>
+              <p className="text-sm text-white/45 font-medium">Your booking is recorded successfully</p>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

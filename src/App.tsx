@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,7 +7,6 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Book from "./pages/Book";
 import Checkout from "./pages/Checkout";
-import AIStyle from "./pages/AIStyle";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import { Layout } from "./components/Layout";
@@ -21,7 +20,7 @@ const Shell = () => {
         <Route path="/" element={<Index />} />
         <Route path="/book" element={<Book />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/style" element={<AIStyle />} />
+        <Route path="/style" element={<Navigate to="/" replace />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />

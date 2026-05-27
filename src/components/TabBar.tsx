@@ -8,7 +8,6 @@ import { useIntelligence } from "@/lib/intelligence";
 const tabs = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/book", icon: Calendar, label: "Book" },
-  { to: "/style", icon: Sparkles, label: "AI Style" },
   { to: "/profile", icon: User, label: "Profile" },
   { to: "/admin", icon: BarChart3, label: "Studio" },
 ];

@@ -144,15 +144,6 @@ const Index = () => {
                   strokeWidth={2}
                 />
               </Link>
-
-              <Link
-                to="/style"
-                onClick={() => haptics.light()}
-                className="press inline-flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl px-6 py-4 text-sm font-medium text-white/50 tracking-tight transition-colors hover:bg-white/[0.08] hover:text-white/70"
-              >
-                <span>Style Consult</span>
-                <Sparkles className="h-4 w-4 text-white/25" strokeWidth={1.5} />
-              </Link>
             </div>
           </BentoCard>
 

@@ -19,7 +19,7 @@ export const TabBar = ({ onIntelligenceTrigger }: { onIntelligenceTrigger?: () =
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-[100] px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-4 pointer-events-none mb-2">
       <div className="mx-auto max-w-md pointer-events-auto">
-        <div className="glass-refractive flex items-center justify-between gap-1 rounded-[40px] p-2 shadow-elev overflow-hidden relative z-10 border border-white/10">
+        <div className="bg-[#0b0c0e]/95 backdrop-blur-2xl flex items-center justify-between gap-1 rounded-[40px] p-2 shadow-elev overflow-hidden relative z-10 border border-white/[0.08] gpu-accelerated">
           {tabs.map(({ to, icon: Icon, label }) => {
             const isActive = pathname === to || (to !== "/" && pathname.startsWith(to));
             

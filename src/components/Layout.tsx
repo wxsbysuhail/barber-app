@@ -56,13 +56,13 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       {!isMobile && <Sidebar />}
       
       <main className="flex-1 relative z-0">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
           <motion.div
             key={pathname}
-            initial={{ opacity: 0, x: isMobile ? 10 : 0 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: isMobile ? -10 : 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.12, ease: "linear" }}
             className={cn("w-full h-full min-h-screen", isMobile && "pb-48")}
           >
             {children}
